@@ -9,23 +9,12 @@ button.onclick = async () => {
 	data = JSON.parse(data);
 	console.log(data);
 
-	const tickets = data.tickets;
+	let tickets = data.tickets;
 	// tickets.forEach((ticket) => {
 	// 	console.log(ticket.priority);
 	// });
-	const sampleTicket = createTicket(tickets[0]);
-	createTicketElement(sampleTicket);
+	createTicketElement(tickets[0]);
 };
-
-function createTicket(obj) {
-	return {
-		id: obj.id,
-		priority: obj.priority,
-		subject: obj.subject,
-		recipient: obj.recipient,
-		description: obj.description,
-	};
-}
 
 function createTicketElement(ticket) {
 	const ticketContainer = document.getElementById('ticket-container');
@@ -38,7 +27,7 @@ function createTicketElement(ticket) {
 			ticketColor = 'green';
 			break;
 		case 'normal':
-		case 'null':
+		case null:
 			ticketColor = 'blue';
 			break;
 		case 'high':
@@ -47,6 +36,8 @@ function createTicketElement(ticket) {
 		case 'urgent':
 			ticketColor = 'red';
 			break;
+		default:
+			ticketColor = 'pink';
 	}
 
 	ticketElement.textContent = ticket.description;
