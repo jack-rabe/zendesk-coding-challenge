@@ -1,19 +1,20 @@
-console.log('JS file served');
-
 const storage = window.sessionStorage;
 
 const button = document.getElementById('data-button');
 button.onclick = async () => {
-	let data = await fetch('/data');
-	data = await data.json();
-	data = JSON.parse(data);
-	console.log(data);
+	let response = await fetch('/data');
+	response = await response.json();
+	response = JSON.parse(response);
 
-	let tickets = data.tickets;
-	// tickets.forEach((ticket) => {
-	// 	console.log(ticket.priority);
-	// });
-	createTicketElement(tickets[0]);
+	const tickets = response.tickets;
+	const numTickets = response.numTickets;
+	console.log(tickets);
+	console.log(numTickets);
+	//const tickets = exampleTickets;
+
+	for (let i = 0; i < 25; i++) {
+		createTicketElement(tickets[i]);
+	}
 };
 
 function createTicketElement(ticket) {
@@ -21,27 +22,41 @@ function createTicketElement(ticket) {
 	const ticketElement = document.createElement('div');
 	ticketElement.classList.add('ticket');
 
-	let ticketColor;
-	switch (ticket.priority) {
-		case 'low':
-			ticketColor = 'green';
-			break;
-		case 'normal':
-		case null:
-			ticketColor = 'blue';
-			break;
-		case 'high':
-			ticketColor = 'yellow';
-			break;
-		case 'urgent':
-			ticketColor = 'red';
-			break;
-		default:
-			ticketColor = 'pink';
-	}
-
-	ticketElement.textContent = ticket.description;
-	ticketElement.style.backgroundColor = ticketColor;
+	createTicketSection(ticketElement, 'id', ticket.id);
+	createTicketSection(ticketElement, 'title', ticket.subject);
+	// set a default priority of normal when none exists
+	const priorityElement = createTicketSection(
+		ticketElement,
+		'priority',
+		ticket.priority || 'normal'
+	);
+	priorityElement.style.color = getTicketColor(ticket.priority);
+	createTicketSection(ticketElement, 'time', ticket.time);
 
 	ticketContainer.appendChild(ticketElement);
+}
+
+function createTicketSection(parentContainer, elementClass, text) {
+	const element = document.createElement('div');
+	element.classList.add(elementClass);
+	element.textContent = text;
+
+	parentContainer.appendChild(element);
+	return element;
+}
+
+function getTicketColor(priority) {
+	switch (priority) {
+		case 'low':
+			return 'green';
+		case 'normal':
+		case null:
+			return 'blue';
+		case 'high':
+			return 'yellow';
+		case 'urgent':
+			return 'red';
+		default:
+			return 'pink';
+	}
 }

@@ -12,6 +12,7 @@ const getTickets = async () => {
 
 	// initial request
 	let response = await fetchData(url, encodedAuth);
+	const numTickets = response.count;
 	response.tickets.forEach((ticketData) =>
 		tickets.push(createTicket(ticketData))
 	);
@@ -24,7 +25,7 @@ const getTickets = async () => {
 		);
 	}
 
-	return response;
+	return { numTickets, tickets };
 };
 
 async function fetchData(url, auth) {
@@ -37,13 +38,20 @@ async function fetchData(url, auth) {
 	return response;
 }
 
-function createTicket(obj) {
+function createTicket(ticketData) {
+	const timeInSeconds = Date.parse(ticketData.created_at);
+	const timeString = new Date(timeInSeconds).toLocaleString('en-US', {
+		timeZoneName: 'short',
+	});
+
 	return {
-		id: obj.id,
-		priority: obj.priority,
-		subject: obj.subject,
-		recipient: obj.recipient,
-		description: obj.description,
+		id: ticketData.id,
+		priority: ticketData.priority,
+		subject: ticketData.subject,
+		recipient: ticketData.recipient,
+		description: ticketData.description,
+		tags: ticketData.tags,
+		time: timeString,
 	};
 }
 

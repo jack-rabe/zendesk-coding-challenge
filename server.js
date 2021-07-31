@@ -18,3 +18,11 @@ app.get('/data', async (req, res) => {
 app.listen(port, () => {
 	console.log(`Server listening at http://localhost:${port}`);
 });
+
+// add tags attribute to all incoming tickets
+// style using a mobile responsive design if possible
+// account for title overflow on ticket tags
+// make buttons the same size regardless of the text size
+// remove pixel hardcoding where possible
+// add headers to the ticket section
+// handling null values for ticket sections
