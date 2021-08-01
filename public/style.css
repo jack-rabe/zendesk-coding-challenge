@@ -12,8 +12,7 @@ body {
 	width: 100%;
 }
 
-h1,
-h2 {
+h1 {
 	background-color: var(--xanadu);
 	color: black;
 
@@ -44,9 +43,9 @@ button:hover {
 	border-color: black;
 }
 
-.ticket {
+.ticket,
+#table-header {
 	display: flex;
-	justify-content: space-around;
 
 	width: 700px;
 	margin: 3px 0px;
@@ -61,7 +60,8 @@ button:hover {
 	transform: scale(1.025);
 }
 
-.ticket > div {
+.ticket > div,
+#table-header > div {
 	text-align: center;
 	margin: 0px;
 	padding: 0px 5px;
@@ -73,24 +73,29 @@ button:hover {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	/* cause the title element to be twice as large as the other sections */
+	/* cause the subject element to be twice as large as the other sections */
 	flex-basis: 0;
 }
 
-/* cause the title element to be twice as large as the other sections and the id to be smaller */
-.ticket > .priority {
+/* cause the subject element to be twice as large as the other sections and the id to be smaller */
+.ticket > .priority,
+#priority-header {
 	flex-grow: 1;
 }
-.ticket > .id {
+.ticket > .id,
+#id-header {
 	flex-grow: 0.3;
 }
-.ticket > .title,
-.ticket > .time {
+.ticket > .subject,
+.ticket > .time,
+#time-header,
+#subject-header {
 	flex-grow: 2;
 }
 
 /* remove the right border from the last child of the ticket div */
-.ticket > div:last-child {
+.ticket > div:last-child,
+#table-header > div:last-child {
 	border: none;
 }
 
@@ -102,22 +107,29 @@ button:hover {
 	padding: 0px 15px;
 
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 	height: 100%;
+}
+
+#table-header {
+	margin: 10px auto;
+	background-color: var(--morning-blue);
+	font-weight: bold;
+	padding: 0px 15px;
 }
 
 #individual-ticket {
 	display: flex;
 	flex-direction: column;
 
-	height: 85%;
+	height: 95%;
 	width: 30%;
 	background-color: var(--sage);
 
 	text-align: center;
 
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 #ticket-id {
@@ -136,8 +148,7 @@ button:hover {
 main {
 	display: flex;
 	justify-content: space-around;
-	height: 65%;
-	overflow: hidden;
+	height: 75%;
 }
 
 p {
