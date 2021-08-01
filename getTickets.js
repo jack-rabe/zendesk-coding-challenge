@@ -1,6 +1,6 @@
 const btoa = require('btoa');
 const fetch = require('node-fetch');
-// load environment variables (username and api key)
+// load environment variables
 require('dotenv').config();
 const username = process.env.ZENDESK_USERNAME;
 const apiToken = process.env.ZENDESK_API_KEY;

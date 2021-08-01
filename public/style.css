@@ -52,6 +52,7 @@ button:hover {
 	margin: 3px 0px;
 	border: 3px solid var(--black-coral);
 	text-align: center;
+	background-color: var(--sage);
 }
 
 .ticket:hover,
@@ -77,14 +78,14 @@ button:hover {
 }
 
 /* cause the title element to be twice as large as the other sections and the id to be smaller */
-.ticket > .priority,
-.ticket > .time {
+.ticket > .priority {
 	flex-grow: 1;
 }
 .ticket > .id {
-	flex-grow: 0.4;
+	flex-grow: 0.3;
 }
-.ticket > .title {
+.ticket > .title,
+.ticket > .time {
 	flex-grow: 2;
 }
 
@@ -97,4 +98,52 @@ button:hover {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	padding: 0px 15px;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 100%;
+}
+
+#individual-ticket {
+	display: flex;
+	flex-direction: column;
+
+	height: 85%;
+	width: 30%;
+	background-color: var(--sage);
+
+	text-align: center;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#ticket-id {
+	display: flex;
+	align-self: flex-start;
+	background-color: var(--morning-blue);
+
+	align-items: center;
+	justify-content: center;
+
+	width: 40px;
+	height: 40px;
+	font-size: 1.5em;
+}
+
+main {
+	display: flex;
+	justify-content: space-around;
+	height: 65%;
+	overflow: hidden;
+}
+
+p {
+	margin: 5px 0px;
+	text-align: left;
+	border-bottom: 1px solid black;
+	/* prevent paragraphs from getting too close to the edge of the ticket viewer */
+	padding: 10px 10px 0px 10px;
 }
