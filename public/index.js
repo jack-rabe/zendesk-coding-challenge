@@ -1,88 +1,77 @@
 const storage = window.sessionStorage;
-
 const nextButton = document.getElementById('next-button');
 const previousButton = document.getElementById('previous-button');
 
+nextButton.onclick = updatePage.bind(null, 1);
+previousButton.onclick = updatePage.bind(null, -1);
 window.onload = async () => {
-	let pageNumber;
-	// set page number to 1 on initial load and fetch all tickets
-	if (!storage.pageNumber) {
+	try {
+		let pageNumber;
 		// load all the data into the express session
-		let response = await fetch('/manyTickets');
-		response = await response.json();
-		response = JSON.parse(response);
+		let response = await fetchAllTicketData();
+		// set page number to 1 on initial load and set number of tickets in session storage
+		if (!storage.pageNumber) {
+			storage.setItem('pageNumber', '1');
+			storage.setItem('numTickets', response.numTickets);
+			pageNumber = 1;
+		}
+		// tickets don't need to be loaded because they are already in storage
+		else {
+			pageNumber = storage.pageNumber;
+		}
 
-		// load the page number and number of tickets into session storage
-		storage.setItem('pageNumber', '1');
-		storage.setItem('numTickets', response.numTickets);
-		pageNumber = 1;
+		const tickets = await fetchPageofTickets(pageNumber);
+		console.log('problem');
+		for (let i = 0; i < tickets.length; i++) {
+			createTicketElement(tickets[i]);
+		}
+		const individualTicket =
+			JSON.parse(storage.getItem('currentTicket')) || tickets[0];
+		displayIndividualTicket(individualTicket);
+	} catch (error) {
+		console.log(error.message);
+		alert(error.message);
 	}
-	// tickets don't need to be loaded because they are already in storage
-	else {
-		pageNumber = storage.pageNumber;
-	}
-
-	const tickets = await fetchPageofTickets(pageNumber);
-	for (let i = 0; i < tickets.length; i++) {
-		createTicketElement(tickets[i]);
-	}
-	const individualTicket =
-		JSON.parse(storage.getItem('currentTicket')) || tickets[0];
-	displayIndividualTicket(individualTicket);
 };
 
-nextButton.onclick = async () => {
-	const currentPageNumber = +storage.getItem('pageNumber');
-	const nextPageNumber = currentPageNumber + 1;
-	if (currentPageNumber * 25 >= storage.numTickets) {
-		return;
-	}
+async function updatePage(change) {
+	try {
+		const currentPageNumber = +storage.getItem('pageNumber');
+		const nextPageNumber = +storage.getItem('pageNumber') + change;
+		console.log(nextPageNumber);
+		// don't allow requests that go outside of the range of tickets
+		if (
+			nextPageNumber <= 0 ||
+			(currentPageNumber * 25 >= storage.numTickets && change > 0)
+		) {
+			return;
+		}
 
-	const tickets = await fetchPageofTickets(nextPageNumber);
-	clearPreviousTickets();
-	for (let i = 0; i < tickets.length; i++) {
-		createTicketElement(tickets[i]);
+		const tickets = await fetchPageofTickets(nextPageNumber);
+		clearPreviousTickets();
+		for (let i = 0; i < tickets.length; i++) {
+			createTicketElement(tickets[i]);
+		}
+		// update the page number to session storage
+		storage.setItem('pageNumber', nextPageNumber);
+	} catch (err) {
+		console.log(err);
+		alert(error.message);
 	}
-	// update page number to session storage
-	storage.setItem('pageNumber', nextPageNumber);
-};
-previousButton.onclick = async () => {
-	const nextPageNumber = +storage.getItem('pageNumber') - 1;
-	if (nextPageNumber <= 0) {
-		return;
-	}
-
-	const tickets = await fetchPageofTickets(nextPageNumber);
-	clearPreviousTickets();
-	for (let i = 0; i < tickets.length; i++) {
-		createTicketElement(tickets[i]);
-	}
-	// update the page number to session storage
-	storage.setItem('pageNumber', nextPageNumber);
-};
-
-async function fetchPageofTickets(pageNumber) {
-	let tickets = await fetch(`ticketPage/${pageNumber}`);
-	tickets = await tickets.json();
-	return JSON.parse(tickets);
 }
 
-async function displayIndividualTicket(ticket) {
+function displayIndividualTicket(ticket) {
 	const subjectElement = document.getElementById('ticket-subject');
 	const idElement = document.getElementById('ticket-id');
 	const descriptionElement = document.getElementById('ticket-description');
 	const tagsElement = document.getElementById('ticket-tags');
 	const timeElement = document.getElementById('ticket-time');
 
-	let response = await fetch(`/ticket/${ticket.id}`);
-	response = await response.json();
-	response = JSON.parse(response);
-
-	subjectElement.textContent = response.subject;
-	idElement.textContent = response.id;
-	descriptionElement.textContent = response.description;
-	tagsElement.textContent = `Tags: ${response.tags.join(', ')}`;
-	timeElement.textContent = `Created at: ${response.time}`;
+	subjectElement.textContent = ticket.subject;
+	idElement.textContent = ticket.id;
+	descriptionElement.textContent = ticket.description;
+	tagsElement.textContent = `Tags: ${ticket.tags.join(', ')}`;
+	timeElement.textContent = `Created at: ${ticket.time}`;
 }
 
 function createTicketElement(ticket) {
@@ -124,7 +113,7 @@ function getTicketColor(priority) {
 			return 'green';
 		case 'normal':
 		case null:
-			return 'blue';
+			return 'purple';
 		case 'high':
 			return 'yellow';
 		case 'urgent':
@@ -144,20 +133,29 @@ function clearPreviousTickets() {
 	ticketContainer.appendChild(tableHeader);
 }
 
-// const dataButton = document.getElementById('data-button');
-// // load all ticket data and display the first 25 tickets on the first page
-// dataButton.onclick = async () => {
-// 	let response = await fetch('/data');
+async function fetchAllTicketData() {
+	let response = await fetch('/manyTickets');
+	response = await response.json();
+	if (response.errorMsg) {
+		throw new Error(response.errorMsg);
+	}
+	return response;
+}
+
+async function fetchPageofTickets(pageNumber) {
+	let tickets = await fetch(`ticketPage/${pageNumber}`);
+	tickets = await tickets.json();
+	if (tickets.errorMsg) {
+		throw new Error(tickets.errorMsg);
+	}
+	return tickets;
+}
+
+// async function fetchIndividualTicket() {
+// 	let response = await fetch(`/ticket/${ticket.id}`);
 // 	response = await response.json();
-// 	response = JSON.parse(response);
-
-// 	storage.setItem('numTickets', response.numTickets);
-// 	// set page number to 1 on initial load
-// 	storage.setItem('pageNumber', '1');
-// 	const tickets = await fetchPageofTickets(1);
-
-// 	for (let i = 0; i < tickets.length; i++) {
-// 		createTicketElement(tickets[i]);
+// 	if (response.error) {
+// 		throw new Error(response.error);
 // 	}
-// 	displayIndividualTicket(tickets[0]);
-// };
+// 	return response;
+// }

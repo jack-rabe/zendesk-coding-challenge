@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const morgan = require('morgan');
 // load environment variables
 require('dotenv').config();
 // load all routes
@@ -8,6 +9,7 @@ const homeRoute = require('./routes/home.js');
 const individualTicketRoute = require('./routes/individualTicket.js');
 const ticketPageRoute = require('./routes/ticketPage.js');
 const manyTicketsRoute = require('./routes/manyTickets.js');
+const errorHandler = require('./errorHandler.js');
 
 const app = express();
 const port = 3000;
@@ -21,12 +23,15 @@ app.use(
 		saveUninitialized: false,
 	})
 );
+// log requests
+app.use(morgan('dev'));
 // mount all of the routes
 app.use('/', homeRoute);
 app.use('/ticket', individualTicketRoute);
 app.use('/ticketPage', ticketPageRoute);
 app.use('/manyTickets', manyTicketsRoute);
 
+app.use(errorHandler);
 app.listen(port, () => {
 	console.log(`Server listening at http://localhost:${port}`);
 });
