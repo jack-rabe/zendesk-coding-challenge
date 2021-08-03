@@ -7,10 +7,10 @@ previousButton.onclick = updatePage.bind(null, -1);
 window.onload = async () => {
 	try {
 		let pageNumber;
-		// load all the data into the express session
-		let response = await fetchAllTicketData();
 		// set page number to 1 on initial load and set number of tickets in session storage
 		if (!storage.pageNumber) {
+			// load all the data into the express session
+			const response = await fetchAllTicketData();
 			storage.setItem('pageNumber', '1');
 			storage.setItem('numTickets', response.numTickets);
 			pageNumber = 1;

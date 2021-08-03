@@ -1,9 +1,10 @@
 {
 	"name": "zendesk-coding-challenge",
 	"version": "1.0.0",
-	"description": "",
+	"description": "A simple ticket viewing system for the Zendesk API.",
 	"scripts": {
-		"test": "jest --coverage",
+		"test": "jest",
+		"testCoverage": "jest --coverage",
 		"start": "node startServer.js",
 		"dev": "nodemon startServer.js"
 	},
@@ -11,7 +12,8 @@
 	"license": "ISC",
 	"devDependencies": {
 		"jest": "^27.0.6",
-		"nodemon": "^2.0.12"
+		"nodemon": "^2.0.12",
+		"supertest": "^6.1.4"
 	},
 	"dependencies": {
 		"btoa": "^1.2.1",
