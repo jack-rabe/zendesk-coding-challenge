@@ -6,32 +6,28 @@ const morgan = require('morgan');
 require('dotenv').config();
 // load all routes
 const homeRoute = require('./routes/home.js');
-const individualTicketRoute = require('./routes/individualTicket.js');
 const ticketPageRoute = require('./routes/ticketPage.js');
 const manyTicketsRoute = require('./routes/manyTickets.js');
+// load error handling middleware
 const errorHandler = require('./errorHandler.js');
 
 const app = express();
-const port = 3000;
 app.use(express.static(path.resolve(__dirname, 'public')));
 // initialize session
 app.use(
 	session({
-		// the secret is substituted since the .env file is stored on my computer
-		secret: process.env.SESSION_SECRET || 'secret',
+		secret: process.env.SESSION_SECRET,
 		resave: true,
 		saveUninitialized: false,
 	})
 );
 // log requests
-app.use(morgan('dev'));
+app.use(morgan(':method :url :status'));
 // mount all of the routes
 app.use('/', homeRoute);
-app.use('/ticket', individualTicketRoute);
 app.use('/ticketPage', ticketPageRoute);
 app.use('/manyTickets', manyTicketsRoute);
-
+// set messages and status codes for all errors
 app.use(errorHandler);
-app.listen(port, () => {
-	console.log(`Server listening at http://localhost:${port}`);
-});
+
+module.exports = app;

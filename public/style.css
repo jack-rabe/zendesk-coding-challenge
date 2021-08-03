@@ -1,23 +1,25 @@
 :root {
-	--almond: #f0dcca;
-	--sage: #cdc6a5;
-	--morning-blue: #8d9f87;
-	--xanadu: #6f9283;
-	--black-coral: #696d79;
+	--navy: #1d3557;
+	--eggshell: #f1faee;
+	--morning-blue: #a8dadc;
+	--periwinkle: #457b9d;
+	--bright-red: #e63946;
 }
+
 html,
 body {
-	background-color: var(--almond);
+	background-color: var(--navy);
+
 	height: 100%;
 	width: 100%;
 }
 
 h1 {
-	background-color: var(--xanadu);
-	color: black;
+	background-color: var(--bright-red);
+	color: var(--eggshell);
 
 	text-align: center;
-	width: 500px;
+	width: 450px;
 	padding: 5px;
 	margin: 20px auto;
 }
@@ -27,19 +29,20 @@ nav {
 	justify-content: space-around;
 	align-items: center;
 
-	background-color: var(--black-coral);
+	background-color: var(--bright-red);
+
 	padding: 5px 0px;
 }
 
-button {
+nav > button {
 	padding: 4px 8px;
-	background-color: var(--morning-blue);
-	border: 2px solid var(--sage);
+	border: 2px solid var(--eggshell);
 	border-radius: 5px;
 
+	background-color: var(--morning-blue);
 	font-size: 16px;
 }
-button:hover {
+nav > button:hover {
 	border-color: black;
 }
 
@@ -49,35 +52,35 @@ button:hover {
 
 	width: 700px;
 	margin: 3px 0px;
-	border: 3px solid var(--black-coral);
+	border: 3px solid var(--bright-red);
+
 	text-align: center;
-	background-color: var(--sage);
+	background-color: var(--eggshell);
 }
 
 .ticket:hover,
 .ticket:hover > div {
-	border-color: black;
+	border-color: var(--periwinkle);
 	transform: scale(1.025);
 }
 
 .ticket > div,
 #table-header > div {
+	flex-basis: 0;
+
 	text-align: center;
 	margin: 0px;
 	padding: 0px 5px;
-	border-right: 3px solid var(--black-coral);
-	width: 100%;
-	height: 100%;
+	border-right: 3px solid var(--bright-red);
 
+	height: 100%;
+	width: 100%;
 	/* prevent the text to wrapping to multiple lines */
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	/* cause the subject element to be twice as large as the other sections */
-	flex-basis: 0;
 }
 
-/* cause the subject element to be twice as large as the other sections and the id to be smaller */
 .ticket > .priority,
 #priority-header {
 	flex-grow: 1;
@@ -99,6 +102,13 @@ button:hover {
 	border: none;
 }
 
+#table-header {
+	margin: 10px auto;
+	padding: 0px 15px;
+
+	background-color: var(--morning-blue);
+	font-weight: bold;
+}
 #ticket-container {
 	display: flex;
 	flex-direction: column;
@@ -111,21 +121,15 @@ button:hover {
 	height: 100%;
 }
 
-#table-header {
-	margin: 10px auto;
-	background-color: var(--morning-blue);
-	font-weight: bold;
-	padding: 0px 15px;
-}
-
 #individual-ticket {
 	display: flex;
 	flex-direction: column;
 
+	margin-top: 10px;
+
 	height: 95%;
 	width: 30%;
-	background-color: var(--sage);
-
+	background-color: var(--eggshell);
 	text-align: center;
 
 	overflow-x: hidden;
@@ -151,6 +155,7 @@ main {
 	height: 75%;
 }
 
+/* represent individual sections of the individual ticket view */
 p {
 	margin: 5px 0px;
 	text-align: left;

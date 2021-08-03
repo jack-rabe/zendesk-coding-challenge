@@ -20,8 +20,8 @@ window.onload = async () => {
 			pageNumber = storage.pageNumber;
 		}
 
+		// display the first available page of tickets and the first ticket in that page
 		const tickets = await fetchPageofTickets(pageNumber);
-		console.log('problem');
 		for (let i = 0; i < tickets.length; i++) {
 			createTicketElement(tickets[i]);
 		}
@@ -29,8 +29,8 @@ window.onload = async () => {
 			JSON.parse(storage.getItem('currentTicket')) || tickets[0];
 		displayIndividualTicket(individualTicket);
 	} catch (error) {
-		console.log(error.message);
 		alert(error.message);
+		console.error(error);
 	}
 };
 
@@ -38,7 +38,6 @@ async function updatePage(change) {
 	try {
 		const currentPageNumber = +storage.getItem('pageNumber');
 		const nextPageNumber = +storage.getItem('pageNumber') + change;
-		console.log(nextPageNumber);
 		// don't allow requests that go outside of the range of tickets
 		if (
 			nextPageNumber <= 0 ||
@@ -47,6 +46,7 @@ async function updatePage(change) {
 			return;
 		}
 
+		// retrieve the next page of tickets and display it
 		const tickets = await fetchPageofTickets(nextPageNumber);
 		clearPreviousTickets();
 		for (let i = 0; i < tickets.length; i++) {
@@ -55,7 +55,7 @@ async function updatePage(change) {
 		// update the page number to session storage
 		storage.setItem('pageNumber', nextPageNumber);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		alert(error.message);
 	}
 }
@@ -119,22 +119,21 @@ function getTicketColor(priority) {
 		case 'urgent':
 			return 'red';
 		default:
-			return 'pink';
+			return 'white';
 	}
 }
 
 function clearPreviousTickets() {
 	const ticketContainer = document.getElementById('ticket-container');
-	const tableHeader = document.getElementById('table-header');
 	while (ticketContainer.firstChild) {
 		ticketContainer.removeChild(ticketContainer.firstChild);
 	}
-	// retain the header that specifies the properties of the table
-	ticketContainer.appendChild(tableHeader);
 }
 
 async function fetchAllTicketData() {
-	let response = await fetch('/manyTickets');
+	let response = await fetch('/manyTickets', {
+		method: 'POST',
+	});
 	response = await response.json();
 	if (response.errorMsg) {
 		throw new Error(response.errorMsg);
@@ -150,12 +149,3 @@ async function fetchPageofTickets(pageNumber) {
 	}
 	return tickets;
 }
-
-// async function fetchIndividualTicket() {
-// 	let response = await fetch(`/ticket/${ticket.id}`);
-// 	response = await response.json();
-// 	if (response.error) {
-// 		throw new Error(response.error);
-// 	}
-// 	return response;
-// }

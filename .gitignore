@@ -1,4 +1,4 @@
 /.vscode
 tickets.json
 /node_modules
-.env
+/coverage
