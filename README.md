@@ -13,7 +13,7 @@ cd zendesk-coding-challenge
 
 npm install
 ```
-- Finally, I attached a .env file in an email to Sabrina Ginter. After you paste this file into the root directory of the project, it will be fully functional and ready to go.
+- Finally, I attached a .env file in an email to Sabrina Ginter. Download the file and ensure that it is named ".env" with only the file extension and no other characters. After you paste this file into the root directory of the project, it will be fully functional and ready to go.
 
 
 ## _Usage:_
