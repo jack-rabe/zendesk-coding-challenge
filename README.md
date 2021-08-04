@@ -1,10 +1,10 @@
 # Zendesk Coding Challenge
 
-## _Installation:_
+## _Installation and Set Up:_
 
 - First, Node.js and git must be installed in your environment. Please refer to the [official Node.js website](https://nodejs.org/) and [official git website](https://git-scm.com/downloads)
   for instructions about how to install them on different operating systems.
-- Then you will be able to clone my repository, navigate into the project folder, and install all dependencies with the following commands.
+- Then, you will be able to clone my repository, navigate into the project folder, and install all dependencies with the following commands.
 
 ```
 git clone https://github.com/jack-rabe/zendesk-coding-challenge.git
@@ -13,8 +13,8 @@ cd zendesk-coding-challenge
 
 npm install
 ```
+- Finally, I attached a .env file in an email to Sabrina Ginter. After you paste this file into the root directory of the project, it will be fully functional and ready to go.
 
-- Now the project is fully setup and ready to go.
 
 ## _Usage:_
 
@@ -40,7 +40,10 @@ npm run test
 ```
 npm run testCoverage
 ```
-
-## _Preview_:
+## _Notes:_
+- The expression-session module uses MemoryStore, which is prone to memory leaks and should only be used in development.
+- In hindsight, I would fetch the data in smaller chunks to reduce the inital load time of my webpage.
+- I am color blind, so don't blame me if I picked an ugly color scheme :)
+## _Preview:_
 
 ![Ticket Viewer](zendesk.PNG)
