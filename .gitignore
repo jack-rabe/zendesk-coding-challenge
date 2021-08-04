@@ -2,3 +2,4 @@
 tickets.json
 /node_modules
 /coverage
+.env
